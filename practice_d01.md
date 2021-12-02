@@ -95,7 +95,7 @@ function solution(progresses, speeds) {
 
 <br />
 
-작업타임: 1시간30분    
+작업타임: 90분    
 작업코드:
 
 ``` js
