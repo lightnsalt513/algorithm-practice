@@ -18,8 +18,8 @@
 ``` js
 function solution(str1, str2) {
     let answer = 0, numberToMultiply = 65536;
-    let arr1 = [], arr2 = [], inter = [], union = [];
-    let firstArr, secondArr;
+    let arr1 = [], arr2 = [];
+    let inter = 0, union = 0;
     const turnToArrayFunc = function (str) {
         let newArr = str
             .split('')
@@ -41,30 +41,24 @@ function solution(str1, str2) {
     if (!arr1.length || !arr2.length) {
         if (!arr1.length && !arr2.length) {
             answer = 1 * numberToMultiply;
-            return answer;
         }
-        answer = 0;
-    } else {
-        for (let i = 0, iMax = arr1.length; i < iMax; i++) {
-            for (let j = 0, jMax = arr2.length; j < jMax; j++) {
-                if (arr1[i] === arr2[j]) {
-                    arr2.splice(j, 1);
-                    inter.push(arr1[i]);
-                    break;
-                }
-            }
-            union.push(arr1[i]);
-        }
-
-        for (let i = 0, max = arr2.length; i < max; i++) {
-          union.push(arr2[i]);
-        }
-        
-        answer = inter.length / union.length;
+        return answer;
     }
-    
-    answer = Math.floor(answer * numberToMultiply);
 
-    return answer;
+    for (let i = 0, iMax = arr1.length; i < iMax; i++) {
+        for (let j = 0, jMax = arr2.length; j < jMax; j++) {
+            if (arr1[i] === arr2[j]) {
+                arr2.splice(j, 1);
+                inter++;
+                break;
+            }
+        }
+        union++;
+    }
+
+    arr2.forEach(() => union++);
+
+    answer = Math.floor(inter / union * numberToMultiply);
+    return answer
 }
 ```
