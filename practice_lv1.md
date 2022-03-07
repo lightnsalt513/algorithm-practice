@@ -95,6 +95,106 @@ function solution(N, stages) {
 }
 ```
 
+<br />
+
+---
+
+<br />
+
+## [모의고사](https://programmers.co.kr/learn/courses/30/lessons/42840)
+
+<br />
+
+자세한 문제 설명은 위의 Title 클릭해서 내용 확인
+
+- 수포자 삼인방은 모의고사에 수학 문제를 전부 찍으려 합니다. 수포자는 1번 문제부터 마지막 문제까지 다음과 같이 찍습니다.    
+1번 수포자가 찍는 방식: 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, ...    
+2번 수포자가 찍는 방식: 2, 1, 2, 3, 2, 4, 2, 5, 2, 1, 2, 3, 2, 4, 2, 5, ...    
+3번 수포자가 찍는 방식: 3, 3, 1, 1, 2, 2, 4, 4, 5, 5, 3, 3, 1, 1, 2, 2, 4, 4, 5, 5, ...
+- 1번 문제부터 마지막 문제까지의 정답이 순서대로 들은 배열 answers가 주어졌을 때, 가장 많은 문제를 맞힌 사람이 누구인지 배열에 담아 return 하도록 solution 함수를 작성해주세요.
+
+<br />
+    
+작업코드:
 
 
+``` js
+function solution(answers) { 
+    const supoja1Pattern = [1, 2, 3, 4, 5];
+    const supoja2Pattern = [2, 1, 2, 3, 2, 4, 2, 5];
+    const supoja3Pattern = [3, 3, 1, 1, 2, 2, 4, 4, 5, 5];
+    
+    function createNew(leng, pattern) {
+        const repeatNum = Math.floor(leng / pattern.length);
+        const sliceNum = parseInt(leng % pattern.length);
+        let newArray = [];
+        for (let i = 1; i <= repeatNum; i++) {
+            newArray = [...newArray, ...pattern];
+        }
+        return newArray.concat(pattern.slice(0, sliceNum));
+    }
+    
+    function countAnswers(original, myanswer) {
+        return original.reduce((count, answer, idx) => {
+            if (answer === myanswer[idx]) return count += 1;
+            return count;
+        }, 0);
+    }
+    
+    const supoja1 = createNew(answers.length, supoja1Pattern);
+    const supoja2 = createNew(answers.length, supoja2Pattern);
+    const supoja3 = createNew(answers.length, supoja3Pattern);
+    
+    const supoja1Count = countAnswers(answers, supoja1);
+    const supoja2Count = countAnswers(answers, supoja2);
+    const supoja3Count = countAnswers(answers, supoja3);
+    
+    const maxCount = Math.max(supoja1Count, supoja2Count, supoja3Count);
+    
+    return new Array(supoja1Count, supoja2Count, supoja3Count).reduce((finalArray, count, idx) => {
+        if (count === maxCount) {
+            finalArray.push(idx + 1);
+            return finalArray;
+        };
+        return finalArray;
+    }, []);
+}
+```
+<br />
+
+---
+
+<br />
+
+## [완주하지 못한 선수](https://programmers.co.kr/learn/courses/30/lessons/42576)
+
+<br />
+
+자세한 문제 설명은 위의 Title 클릭해서 내용 확인
+
+- 수많은 마라톤 선수들이 마라톤에 참여하였습니다. 단 한 명의 선수를 제외하고는 모든 선수가 마라톤을 완주하였습니다.
+- 마라톤에 참여한 선수들의 이름이 담긴 배열 participant와 완주한 선수들의 이름이 담긴 배열 completion이 주어질 때, 완주하지 못한 선수의 이름을 return 하도록 solution 함수를 작성해주세요.
+
+<br />
+    
+작업코드:
+
+
+``` js
+function solution(participant, completion) {
+    var answer = '';
+    participant.sort();
+    completion.sort();
+    for (var i = 0, iMax = completion.length; i < iMax; i++ ) {
+        if (completion[i] !== participant[i]) {
+            answer = participant[i];
+            break;      
+        } else if (i === iMax - 1) {
+            answer = participant[i+1];
+            break;
+        }
+    }
+    return answer;
+}
+```
     
