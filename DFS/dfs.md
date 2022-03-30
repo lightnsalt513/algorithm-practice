@@ -150,6 +150,7 @@ console.log(solution([1,3,5,6,7,10]));
 <br />
 
 ``` js
+// 바둑이 count도 함께 출력하도록 구현
 function solution(c, weights) {
   let answer = Number.MIN_SAFE_INTEGER;
   let nCount = 0;
@@ -165,8 +166,104 @@ function solution(c, weights) {
       dfs(depth + 1, total, count)
     }
   }
-  dfs(0, 0);
+  dfs(0, 0, 0);
   return answer;
 }
 console.log(solution(259, [81, 58, 42, 33, 61]));
+```
+
+<br />
+
+## 최대점수 구하기
+
+<br />
+
+- 문제를 풀었을때 얻는 점수와 푸는데 걸리는 시간이 주어지게 되면, 제한시간 M안에 N개의 문제 중 최대 점수를 얻을 수 있도록 구현 (한 유형당 한개만 풀 수 있음)
+
+<br />
+
+``` js
+function solution(timeLimit, tests) {
+  let answer = Number.MIN_SAFE_INTEGER;
+  function dfs(depth, score, time) {
+    if (time > timeLimit) return;
+    if (depth >= tests.length) {
+      answer = Math.max(answer, score);
+    } else {
+      dfs(depth + 1, score + tests[depth][0], time + tests[depth][1]);
+      dfs(depth + 1, score, time);
+    } 
+  }
+  dfs(0, 0, 0);
+  return answer;
+}
+console.log(solution(20, [[5, 20], [10, 5], [25, 12], [15, 8], [6, 3], [7, 4]]));
+```
+
+<br />
+
+## 중복순열
+
+<br />
+
+- 1부터 N까지 번호가 적힌 구슬이 있다. 이 중 중복을 허락하여 M번을 뽑아 일렬로 나열하는 방법을 모두 출력
+- e.g. :
+  - N이 3이면 총 {1, 2, 3}의 원소가 있게된다. 중복 순열이기 때문에 n^m. 만약 M이 2번이면 즉 3^2 = 9번이 된다
+
+<br />
+
+``` js
+function solution(n, m) {
+  let answer = [];
+  let tmp = Array.from({ length: m }, () => 0)
+  function dfs(depth) {
+    if (depth >= m) {
+      answer.push(tmp.slice(0));
+    } else {
+      for (let i = 1; i <= n; i++) {
+        tmp[depth] = i;
+        dfs(depth + 1);
+      }
+    }
+  }
+  dfs(0);
+  return answer;
+}
+console.log(solution(3, 2));
+```
+
+<br />
+
+## 순열 구하기
+
+<br />
+
+- 10이하의 N개의 자연수가 주어지면 이 중 M개를 뽑아 일렬로 나열하는 방법을 모두 출력 (중복은 허락하지 않음)
+- e.g. :
+  - N이 총 4개의 원소를 가진 배열이라면, 순열이기 때문에 n * (n - 1) * (n - 2)... 형식을 같는다. 만약 M이 2번이면 즉 4 * (4-1) = 12번이 된다
+
+<br />
+
+``` js
+function solution(m, arr) {
+  let answer = [];
+  let check = Array.from({ length: arr.length }, () => 0); // [0, 0, 0]
+  let tmp = Array.from({ length: m }, () => 0); // [0, 0]
+  function dfs(depth) {
+    if (depth >= m) {
+      answer.push(tmp.slice(0));
+    } else {
+      for (let i = 0; i < arr.length; i++) {
+        if (check[i]) continue;
+        check[i] = 1;
+        tmp[depth] = arr[i];
+        dfs(depth + 1);
+        check[i] = 0;
+      }
+    }
+  }
+  dfs(0);
+  return answer;
+}
+console.log(solution(2, [3, 6, 9]));
 ```
